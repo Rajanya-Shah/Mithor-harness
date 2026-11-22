@@ -1,6 +1,6 @@
 # Mithor Philipp Harness (`mithor-philipp-harness`)
 
-A zero-footprint, bilingual (German $\leftrightarrow$ English) external agent harness built on **DeepSeek Harness (`dsh` / `@deepseek-ai/cordis`)** for Mithor co-founder **Philipp**.
+A zero-footprint, bilingual (German $\leftrightarrow$ English) external agent harness built on **DeepSeek Harness (`dsh` / `@deepseek-ai/cordis`)** for Mithor co-founder **user**.
 
 It enables Philipp to inspect UI elements visually, adjust layout/copy/PDF styling in `apps/FEP`, and fine-tune commercial real estate valuation formulas in `apps/AI/app/modules/ide/` using natural German—while enforcing hard path sandboxing, multi-gate automated verification (`vitest`, `vite build`, `pytest` golden fixtures, Playwright visual diffs), zero-Git branching, and `L1`–`L4` PR risk triage against `Mithor-Platforms` (`develop` branch).
 
