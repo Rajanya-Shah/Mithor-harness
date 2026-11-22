@@ -1,0 +1,37 @@
+{
+  "description": "Reference golden test cases from apps/AI/tests/unit/ide used to verify Philipp's IDE math edits.",
+  "testCommand": "poetry run pytest tests/unit/ide -q",
+  "goldenCases": [
+    {
+      "id": "hohetorstrasse_deal_check",
+      "name": "Hohetorstraße (End-to-End Deal Check & Pricing)",
+      "testFile": "apps/AI/tests/unit/ide/test_service_evaluate.py",
+      "testFunction": "test_golden_case_end_to_end",
+      "expected": {
+        "totalScoreTarget": 0.7475,
+        "totalScoreToleranceAbs": 0.03,
+        "pillarScoreToleranceAbs": 0.05,
+        "verdict": "CONDITIONAL_GO",
+        "ideBidTargetEur": 2280000,
+        "ideBidTolerancePct": 2.0
+      }
+    },
+    {
+      "id": "clayallee_18_dcf",
+      "name": "Clayallee 18 (Knight Frank 10-Year DCF Benchmark)",
+      "testFile": "apps/AI/tests/unit/ide/test_dcf.py",
+      "expected": {
+        "marketValueTargetEur": 4600000,
+        "marketValueTolerancePct": 5.0
+      }
+    },
+    {
+      "id": "frankfurter_allee_residual",
+      "name": "Frankfurter Allee (Knight Frank Residual Development Benchmark)",
+      "testFile": "apps/AI/tests/unit/ide/test_residual.py",
+      "expected": {
+        "residualValueTolerancePct": 5.0
+      }
+    }
+  ]
+}

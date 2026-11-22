@@ -1,0 +1,7 @@
+{
+  "name": "@mithor-harness/mcp-visual-preview",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.js"
+}

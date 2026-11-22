@@ -1,0 +1,113 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mithor.eu/schemas/zones.schema.json",
+  "title": "Mithor Philipp Harness Zone & PR Risk Policy Schema",
+  "description": "Declarative 3-zone path guardrail policy, verification gates, and L1-L4 PR triage rules for Mithor-Platforms.",
+  "type": "object",
+  "required": ["version", "defaultBaseBranch", "zeroAiAttribution", "zones", "gates", "prRiskTiers"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+    "mithorRepoRootEnv": { "type": "string", "default": "MITHOR_REPO_PATH" },
+    "defaultBaseBranch": { "type": "string", "enum": ["develop", "main"] },
+    "zeroAiAttribution": {
+      "type": "object",
+      "required": ["enforce", "forbiddenPatterns"],
+      "properties": {
+        "enforce": { "type": "boolean" },
+        "forbiddenPatterns": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1
+        }
+      }
+    },
+    "zones": {
+      "type": "object",
+      "required": ["green_ui", "yellow_ide_math", "red_locked"],
+      "properties": {
+        "green_ui": { "$ref": "#/$defs/zoneRule" },
+        "yellow_ide_math": { "$ref": "#/$defs/zoneRule" },
+        "red_locked": { "$ref": "#/$defs/zoneRule" }
+      },
+      "additionalProperties": false
+    },
+    "gates": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": { "$ref": "#/$defs/gateDefinition" }
+    },
+    "prRiskTiers": {
+      "type": "array",
+      "minItems": 4,
+      "items": { "$ref": "#/$defs/prRiskTier" }
+    }
+  },
+  "$defs": {
+    "zoneRule": {
+      "type": "object",
+      "required": ["access", "paths"],
+      "properties": {
+        "access": {
+          "type": "string",
+          "enum": ["read_write", "guarded_write", "blocked"]
+        },
+        "paths": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1
+        },
+        "excludedPaths": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "requiredGates": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "requireGermanExplanationBeforeEdit": { "type": "boolean" },
+        "requireExplicitUserConfirmation": { "type": "boolean" },
+        "i18nParityFiles": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "escalationMessageDe": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "gateDefinition": {
+      "type": "object",
+      "required": ["type", "description"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["shell", "mcp_tool", "internal_contract_validator"]
+        },
+        "description": { "type": "string" },
+        "cwd": { "type": "string" },
+        "command": { "type": "string" },
+        "timeoutMs": { "type": "integer", "minimum": 1000 },
+        "server": { "type": "string" },
+        "tool": { "type": "string" }
+      }
+    },
+    "prRiskTier": {
+      "type": "object",
+      "required": ["level", "tag", "scope", "reviewers"],
+      "properties": {
+        "level": { "type": "string", "enum": ["L1", "L2", "L3", "L4"] },
+        "tag": { "type": "string" },
+        "scope": { "type": "string" },
+        "reviewers": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "matchPaths": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

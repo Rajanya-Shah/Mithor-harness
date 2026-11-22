@@ -1,0 +1,24 @@
+{
+  "name": "mithor-philipp-harness",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Zero-footprint bilingual DeepSeek Harness plugins, MCP servers, and skill pack for Mithor-Platforms",
+  "type": "module",
+  "packageManager": "pnpm@9.15.0",
+  "scripts": {
+    "build": "node scripts/validate-milestone1.mjs",
+    "test": "node scripts/validate-milestone1.mjs && node --test scripts/validate-milestone2.mjs scripts/validate-milestone3-4.mjs",
+    "validate:m1": "node scripts/validate-milestone1.mjs",
+    "validate:m2": "node --test scripts/validate-milestone2.mjs",
+    "validate:m3-4": "node --test scripts/validate-milestone3-4.mjs",
+    "harness:bootstrap": "node scripts/bootstrap-dsh.mjs",
+    "harness:launch": "node scripts/launch-philipp.mjs"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "picomatch": "^4.0.2",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8",
+    "yaml": "^2.6.1"
+  }
+}

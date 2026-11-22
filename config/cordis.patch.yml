@@ -1,0 +1,59 @@
+# DeepSeek Harness (dsh) Profile Patch Overlay for Philipp
+# Mounted into ~/.dsh/profiles/philipp/cordis.patch.yml via `pnpm harness:bootstrap`
+
+- id: skill-filesystem
+  disabled: false
+  config:
+    customSkillDirs:
+      - "${HARNESS_ROOT}/skills/prebuilt"
+      - "${HARNESS_ROOT}/skills/mithor-pack"
+
+- insert:
+  - id: mithor-guard
+    name: dsh-plugin-mithor-guard
+    config:
+      zonesConfigPath: "${HARNESS_ROOT}/config/zones.config.json"
+      goldenFixturesPath: "${HARNESS_ROOT}/config/ide-golden-fixtures.json"
+      mithorRepoPath: "${MITHOR_REPO_PATH}"
+      maxAutoFixRetries: 3
+
+  - id: mithor-git-triage
+    name: dsh-plugin-mithor-git-triage
+    config:
+      zonesConfigPath: "${HARNESS_ROOT}/config/zones.config.json"
+      mithorRepoPath: "${MITHOR_REPO_PATH}"
+      branchPrefix: "philipp/"
+      defaultBaseBranch: "develop"
+      gitProvider: "github"
+
+  - id: mithor-inspector
+    name: dsh-plugin-mithor-inspector
+    config:
+      mithorRepoPath: "${MITHOR_REPO_PATH}"
+      fepTargetUrl: "http://127.0.0.1:5173"
+      inspectorProxyPort: 5174
+
+  - id: mcp-mithor-code-map
+    name: "@deepseek-ai/dsh-mcp-client"
+    config:
+      transport: stdio
+      serverName: "mithor-code-map"
+      command: "node"
+      args:
+        - "${HARNESS_ROOT}/mcp/mithor-code-map/src/index.js"
+      env:
+        MITHOR_REPO_PATH: "${MITHOR_REPO_PATH}"
+        HARNESS_ROOT: "${HARNESS_ROOT}"
+
+  - id: mcp-mithor-visual-preview
+    name: "@deepseek-ai/dsh-mcp-client"
+    config:
+      transport: stdio
+      serverName: "mithor-visual-preview"
+      command: "node"
+      args:
+        - "${HARNESS_ROOT}/mcp/mithor-visual-preview/src/index.js"
+      env:
+        MITHOR_REPO_PATH: "${MITHOR_REPO_PATH}"
+        HARNESS_ROOT: "${HARNESS_ROOT}"
+        FEP_URL: "http://127.0.0.1:5173"

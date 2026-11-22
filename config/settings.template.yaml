@@ -1,0 +1,26 @@
+# DeepSeek Harness Profile Settings Template (~/.dsh/profiles/philipp/settings.yaml)
+profile: philipp
+language: de-DE
+
+server:
+  host: "127.0.0.1"
+  port: 3080
+
+model:
+  provider: deepseek
+  baseURL: "https://api.deepseek.com/v1"
+  apiKeyEnv: "DEEPSEEK_API_KEY"
+  defaultModel: "deepseek-chat"
+  reasoningModel: "deepseek-reasoner"
+  temperature: 0.1
+
+workspace:
+  # Points to Philipp's local checkout of Mithor-Platforms without polluting its Git tree
+  projectRoot: "${MITHOR_REPO_PATH}"
+  allowOutsideWorkspaceWrites: false
+
+permissions:
+  # All writes and shell executions are governed by dsh-plugin-mithor-guard
+  fileRead: "allow"
+  fileWrite: "plugin-managed"
+  shellExec: "plugin-managed"
