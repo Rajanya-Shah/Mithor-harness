@@ -11,10 +11,8 @@ echo.
 set "SCRIPT_DIR=%~dp0"
 for %%I in ("%SCRIPT_DIR%..\..") do set "HARNESS_ROOT=%%~fI"
 
-:: Default Mithor-Platforms sibling folder
-for %%I in ("%HARNESS_ROOT%\..\Mithor-Platforms") do set "DEFAULT_MITHOR_REPO=%%~fI"
-set /p "MITHOR_REPO_PATH=Path to Mithor-Platforms [%DEFAULT_MITHOR_REPO%]: "
-if "%MITHOR_REPO_PATH%"=="" set "MITHOR_REPO_PATH=%DEFAULT_MITHOR_REPO%"
+:: Default Mithor-Platforms sibling folder (no prompt needed)
+for %%I in ("%HARNESS_ROOT%\..\Mithor-Platforms") do set "MITHOR_REPO_PATH=%%~fI"
 
 echo.
 echo [1/6] Checking required tools (Git, GitHub CLI, Node.js, Python)...
@@ -60,16 +58,22 @@ setx MITHOR_REPO_PATH "%MITHOR_REPO_PATH%" >nul
 setx MITHOR_HARNESS_ROOT "%HARNESS_ROOT%" >nul
 
 echo.
-echo [4/6] Checking Mithor-Platforms repository...
+echo [4/6] Checking GitHub login ^& cloning Mithor-Platforms (develop branch)...
+gh auth status >nul 2>&1
+if errorlevel 1 (
+    echo   Please sign in to GitHub so Mithor-Platforms can be cloned...
+    call gh auth login -p https -w
+)
+call gh auth setup-git >nul 2>&1
+
 if not exist "%MITHOR_REPO_PATH%\apps\FEP\package.json" (
-    echo   Mithor-Platforms not found at "%MITHOR_REPO_PATH%".
-    set /p "CLONE_CONFIRM=Clone Mithor-Tech/Mithor-Platforms there now? (y/n): "
-    if /i "!CLONE_CONFIRM!"=="y" (
-        git clone https://github.com/Mithor-Tech/Mithor-Platforms.git "%MITHOR_REPO_PATH%"
-        pushd "%MITHOR_REPO_PATH%"
-        git checkout develop
-        popd
-    )
+    echo   Cloning https://github.com/Mithor-Tech/Mithor-Platforms.git into "%MITHOR_REPO_PATH%"...
+    git clone https://github.com/Mithor-Tech/Mithor-Platforms.git "%MITHOR_REPO_PATH%"
+    pushd "%MITHOR_REPO_PATH%"
+    git checkout develop
+    popd
+) else (
+    echo   Mithor-Platforms already exists at "%MITHOR_REPO_PATH%".
 )
 
 if exist "%MITHOR_REPO_PATH%\apps\FEP\package.json" (
